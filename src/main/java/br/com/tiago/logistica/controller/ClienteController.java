@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.tiago.logistica.models.Cliente;
 import br.com.tiago.logistica.repository.ClienteRepository;
+import br.com.tiago.logistica.service.CatalogoClienteService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 public class ClienteController {
 		
 	private ClienteRepository clienteRepository;
+	private CatalogoClienteService catalogoClienteService;
 
 	@GetMapping
 	public List<Cliente> listar(){
@@ -42,7 +44,7 @@ public class ClienteController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-		return clienteRepository.save(cliente);
+		return catalogoClienteService.salva(cliente);
 	}
 	
 	@PutMapping("/{clienteId}")
@@ -53,7 +55,7 @@ public class ClienteController {
 		}
 		
 		cliente.setId(clienteId);
-		cliente = clienteRepository.save(cliente);
+		cliente = catalogoClienteService.salva(cliente);
 		
 		return ResponseEntity.ok(cliente);
 	}
@@ -64,7 +66,7 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		clienteRepository.deleteById(clienteId);
+		catalogoClienteService.deletar(clienteId);
 		return ResponseEntity.noContent().build();
 	}
 }
